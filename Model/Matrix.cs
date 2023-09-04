@@ -11,7 +11,7 @@ namespace TestApp
         private Matrix(string[] value)
         {
             this.value = value;
-            calculateMaxString();
+            CalculateMaxString();
         }
 
         public static Matrix CreateMatrix(List<string> value)
@@ -37,7 +37,7 @@ namespace TestApp
             }
         }
 
-        private void analyzeValue(char value, ref StringMatrix currentString, ref StringMatrix maxString)
+        private void AnalyzeValue(char value, ref StringMatrix currentString, ref StringMatrix maxString)
         {
             if (currentString.Character == value)
             {
@@ -68,7 +68,7 @@ namespace TestApp
                 for (int j = 0; j < value[0].Length; j++)
                 {
                     char valor = value[i][j];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                 }
             }
 
@@ -87,7 +87,7 @@ namespace TestApp
                 for (int i = 0; i < value.Length; i++)
                 {
                     char valor = value[i][j];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                 }
             }
 
@@ -107,7 +107,7 @@ namespace TestApp
                 for (int iAux = i; iAux >= 0 && j < value[iAux].Length; iAux--)
                 {
                     char valor = value[iAux][j];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                     j++;
                 }
             }
@@ -120,7 +120,7 @@ namespace TestApp
                 for (int jAux = j; i >= 0 && jAux < value[i].Length; jAux++)
                 {
                     char valor = value[i][jAux];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                     i--;
                 }
             }
@@ -142,7 +142,7 @@ namespace TestApp
                 for (int iAux = i; iAux >= 0 && j > 0; iAux--)
                 {
                     char valor = value[iAux][j];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                     j--;
                 }
             }
@@ -155,7 +155,7 @@ namespace TestApp
                 for (int jAux = j; i >= 0 && jAux >= 0; jAux--)
                 {
                     char valor = value[i][jAux];
-                    analyzeValue(valor, ref currentString, ref maxString);
+                    AnalyzeValue(valor, ref currentString, ref maxString);
                     i--;
                 }
             }
@@ -163,7 +163,7 @@ namespace TestApp
             return maxString;
         }
 
-        public void calculateMaxString()
+        public void CalculateMaxString()
         {
             List<Task<StringMatrix>> tasks = new List<Task<StringMatrix>>();
             
@@ -204,7 +204,7 @@ namespace TestApp
                 cadenasMaximas.Add(task.Result);
             }
 
-            foreach(StringMatrix cadena in cadenasMaximas)
+            foreach (StringMatrix cadena in cadenasMaximas)
             {
                 if (maxStrings == null || cadena.Sum > maxStrings.First().Sum)
                 {
