@@ -2,7 +2,7 @@
 {
     public class EmptyLineException : Exception
     {
-        public EmptyLineException() : base("Error: se encontraron lineas sin caracteres")
+        public EmptyLineException() : base("Error: se encontraron filas sin caracteres")
         {
         }
     }

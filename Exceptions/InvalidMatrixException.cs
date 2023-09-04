@@ -2,7 +2,7 @@
 {
     public class InvalidMatrixException : Exception
     {
-        public InvalidMatrixException() : base("Error: Todas las lineas de la matriz no tienen la misma longitud.")
+        public InvalidMatrixException() : base("Error: Las filas de la matriz no tienen la misma longitud.")
         {
         }
     }

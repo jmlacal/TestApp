@@ -63,7 +63,7 @@ namespace TestApp
                 currentString = new StringMatrix(value, 1, currentString.Type);
             }
 
-            if (currentMaxString.Count == 0 || currentString != currentMaxString.Last())
+            if ((currentMaxString.Count == 0 || currentString != currentMaxString.Last()) && currentString.Sum > 1)
             {
                 SetMaxStrings(currentString, ref currentMaxString);
             }
@@ -176,7 +176,7 @@ namespace TestApp
             return maxString;
         }
 
-        public void CalculateMaxString()
+        private void CalculateMaxString()
         {
             List<Task<List<StringMatrix>>> tasks = new List<Task<List<StringMatrix>>>();
             
@@ -225,6 +225,13 @@ namespace TestApp
 
         public void ShowMaxString()
         {
+            if (maxStrings.Count == 0)
+            {
+                Console.WriteLine("\nLa matriz no contiene ninguna cadena caracteres adyacentes iguales.");
+
+                return;
+            }
+
             string stringToShow = "\"";
 
             for (int  i = 0; i < maxStrings.Count(); i++ )
