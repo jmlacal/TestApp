@@ -12,6 +12,14 @@ namespace TestApp.Helpers
             }
         }
 
+        private static void ValidateNullCharacterLine(string line)
+        {
+            if (line.Contains(",,"))
+            {
+                throw new NullCharacterException();
+            }
+        }
+
         private static void ValidateExcesiveCaractersLine(string line)
         {
             if ((line.Count(c => (c == ',')) + 1) != ((line.Length + 1) / 2f))
@@ -63,6 +71,7 @@ namespace TestApp.Helpers
                     while (line != null)
                     {
                         ValidateEmptyLine(line);
+                        ValidateNullCharacterLine(line);
                         CleanSpaces(ref line);
                         DeleteFinalComma(ref line);
                         ValidateExcesiveCaractersLine(line);
