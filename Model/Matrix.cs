@@ -1,15 +1,40 @@
 ﻿using TestApp.Enums;
+using TestApp.Exceptions;
 
 namespace TestApp
 {
     public class Matrix
     {
-        private Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Vertical);
-        private string[] value;
+        private List<Cadena> maxStrings;
+        private readonly string[] value;
 
-        public Matrix(string[] value)
+        private Matrix(string[] value)
         {
             this.value = value;
+            calculateMaxString();
+        }
+
+        public static Matrix CreateMatrix(List<string> value)
+        {
+            Validate(value);
+            return new Matrix(value.ToArray());
+        }
+
+        private static void Validate(List<string> value)
+        {
+            int largoPrimerLinea = 0;
+
+            foreach (string line in value)
+            {
+                if (largoPrimerLinea == 0)
+                {
+                    largoPrimerLinea = line.Length;
+                }
+                else if (largoPrimerLinea != line.Length)
+                {
+                    throw new InvalidMatrixException();
+                }
+            }
         }
 
         private void analizarValor(char valor, ref Cadena actualCadena, ref Cadena maximaCadena)
@@ -31,7 +56,7 @@ namespace TestApp
             return;
         }
 
-        private void SearchHorizontalsStrings()
+        private Cadena SearchHorizontalsStrings()
         {
             Cadena actualCadena;
             Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Horizontal);
@@ -47,10 +72,10 @@ namespace TestApp
                 }
             }
 
-            Console.WriteLine(maximaCadena.Caracter + ":" + maximaCadena.Repeticiones);
+            return maximaCadena;
         }
 
-        private void SearchVerticalsStrings()
+        private Cadena SearchVerticalsStrings()
         {
             Cadena actualCadena;
             Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Vertical);
@@ -66,10 +91,10 @@ namespace TestApp
                 }
             }
 
-            Console.WriteLine(maximaCadena.Caracter + ":" + maximaCadena.Repeticiones);
+            return maximaCadena;
         }
 
-        private void SearchDiagonalsString()
+        private Cadena SearchDiagonalsString()
         {
             Cadena actualCadena;
             Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
@@ -100,10 +125,10 @@ namespace TestApp
                 }
             }
 
-            Console.WriteLine(maximaCadena.Caracter + ":" + maximaCadena.Repeticiones);
+            return maximaCadena;
         }
 
-        private void SearchInversalDiagonalStrings()
+        private Cadena SearchInversalDiagonalStrings()
         {
             Cadena actualCadena;
             Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
@@ -135,34 +160,93 @@ namespace TestApp
                 }
             }
 
-            Console.WriteLine(maximaCadena.Caracter + ":" + maximaCadena.Repeticiones);
+            return maximaCadena;
         }
 
-        public void searchMaxString()
+        public void calculateMaxString()
         {
-            SearchHorizontalsStrings();
-            SearchVerticalsStrings();
-            SearchDiagonalsString();
-            SearchInversalDiagonalStrings();
+            List<Task<Cadena>> tasks = new List<Task<Cadena>>();
+            
+            tasks.Add(new Task<Cadena>(() =>
+            {
+                return SearchHorizontalsStrings();
+            }));
+
+            tasks.Add(new Task<Cadena>(() =>
+            {
+                return SearchVerticalsStrings();
+            }));
+
+            tasks.Add(new Task<Cadena>(() => 
+            {
+                return SearchDiagonalsString();
+            }));
+
+            tasks.Add(new Task<Cadena>(() =>
+            {
+                return SearchInversalDiagonalStrings();
+            }));
+
+            foreach (Task<Cadena> task in tasks)
+            {
+                task.Start();
+            }
+
+            foreach (Task<Cadena> task in tasks)
+            {
+                task.Wait();
+            }
+
+            List<Cadena> cadenasMaximas = new List<Cadena>();
+
+            foreach (Task<Cadena> task in tasks)
+            {
+                cadenasMaximas.Add(task.Result);
+            }
+
+            foreach(Cadena cadena in cadenasMaximas)
+            {
+                if (maxStrings == null || cadena.Repeticiones > maxStrings.First().Repeticiones)
+                {
+                    maxStrings = new List<Cadena>
+                    {
+                        cadena
+                    };
+                }
+                else if (cadena.Repeticiones == maxStrings.First().Repeticiones)
+                {
+                    maxStrings.Add(cadena);
+                }
+            }
         }
 
         public void ShowMaxString()
         {
-            string stringToShow = "";
+            string stringToShow = "\"";
 
-            for (int i = 1; i < maximaCadena.Repeticiones; i++)
+            for (int  i = 0; i < maxStrings.Count(); i++ )
             {
-                if (i < maximaCadena.Repeticiones)
+                Cadena maxString = maxStrings[i];
+
+                if (i > 0)
                 {
-                    stringToShow = stringToShow + maximaCadena.Caracter + ", ";
+                    stringToShow = stringToShow + " y \"";
                 }
-                else
+
+                for (int j = 1; j <= maxString.Repeticiones; j++)
                 {
-                    stringToShow = stringToShow + maximaCadena.Caracter + "(" + maximaCadena.Type + ")";
+                    if (j < maxStrings[0].Repeticiones)
+                    {
+                        stringToShow = stringToShow + maxString.Caracter + ", ";
+                    }
+                    else
+                    {
+                        stringToShow = stringToShow + maxString.Caracter + " (" + maxString.Type + ")\"";
+                    }
                 }
             }
 
-            Console.WriteLine("\nLa cadena de caracteres adyacentes mas larga es : " + stringToShow);
+            Console.WriteLine("\nCadena/s de caracteres adyacentes mas larga/s: " + stringToShow);            
         }
     }
 }

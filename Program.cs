@@ -6,7 +6,7 @@ string lineaIngresada = Console.ReadLine();
 
 while (lineaIngresada.ToUpper() != "N")
 {
-    bool lecturaExitosa = FileManagerHelper.ReadFile(lineaIngresada, out Matrix2? matrix, out string errorLectura);
+    bool lecturaExitosa = FileManagerHelper.ReadFile(lineaIngresada, out Matrix? matrix, out string errorLectura);
 
     if (lecturaExitosa)
     {

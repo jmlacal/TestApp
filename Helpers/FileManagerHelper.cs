@@ -46,7 +46,7 @@ namespace TestApp.Helpers
             line = line.Replace(",", string.Empty);
         }
 
-        public static bool ReadFile(string ruta, out Matrix2? matrix, out string error)
+        public static bool ReadFile(string ruta, out Matrix? matrix, out string error)
         {
             string line;
             List<string> lineasArchivo = new List<string>();
@@ -73,7 +73,7 @@ namespace TestApp.Helpers
                     }
 
                     ValidateEmptyFile(lineasArchivo);
-                    matrix = Matrix2.CreateMatrix(lineasArchivo);
+                    matrix = Matrix.CreateMatrix(lineasArchivo);
                 }
                 catch (Exception ex)
                 {
