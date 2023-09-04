@@ -5,7 +5,7 @@ namespace TestApp
 {
     public class Matrix
     {
-        private List<Cadena> maxStrings;
+        private List<StringMatrix> maxStrings;
         private readonly string[] value;
 
         private Matrix(string[] value)
@@ -22,92 +22,92 @@ namespace TestApp
 
         private static void Validate(List<string> value)
         {
-            int largoPrimerLinea = 0;
+            int lengthFirstLine = 0;
 
             foreach (string line in value)
             {
-                if (largoPrimerLinea == 0)
+                if (lengthFirstLine == 0)
                 {
-                    largoPrimerLinea = line.Length;
+                    lengthFirstLine = line.Length;
                 }
-                else if (largoPrimerLinea != line.Length)
+                else if (lengthFirstLine != line.Length)
                 {
                     throw new InvalidMatrixException();
                 }
             }
         }
 
-        private void analizarValor(char valor, ref Cadena actualCadena, ref Cadena maximaCadena)
+        private void analyzeValue(char value, ref StringMatrix currentString, ref StringMatrix maxString)
         {
-            if (actualCadena.Caracter == valor)
+            if (currentString.Character == value)
             {
-                actualCadena.Repeticiones++;
+                currentString.Sum++;
             }
             else
             {
-                actualCadena = new Cadena(valor, 1, actualCadena.Type);
+                currentString = new StringMatrix(value, 1, currentString.Type);
             }
 
-            if (actualCadena.Repeticiones > maximaCadena.Repeticiones)
+            if (currentString.Sum > maxString.Sum)
             {
-                maximaCadena = actualCadena;
+                maxString = currentString;
             }
 
             return;
         }
 
-        private Cadena SearchHorizontalsStrings()
+        private StringMatrix SearchHorizontalsStrings()
         {
-            Cadena actualCadena;
-            Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Horizontal);
+            StringMatrix currentString;
+            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Horizontal);
 
             for (int i = 0; i < value.Length; i++)
             {
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Horizontal);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Horizontal);
 
                 for (int j = 0; j < value[0].Length; j++)
                 {
                     char valor = value[i][j];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                 }
             }
 
-            return maximaCadena;
+            return maxString;
         }
 
-        private Cadena SearchVerticalsStrings()
+        private StringMatrix SearchVerticalsStrings()
         {
-            Cadena actualCadena;
-            Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Vertical);
+            StringMatrix currentString;
+            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Vertical);
 
             for (int j = 0; j < value[0].Length; j++)
             {
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Vertical);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Vertical);
 
                 for (int i = 0; i < value.Length; i++)
                 {
                     char valor = value[i][j];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                 }
             }
 
-            return maximaCadena;
+            return maxString;
         }
 
-        private Cadena SearchDiagonalsString()
+        private StringMatrix SearchDiagonalsString()
         {
-            Cadena actualCadena;
-            Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+            StringMatrix currentString;
+            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
             for (int i = 0; i < value.Length; i++)
             {
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
                 int j = 0;
                 for (int iAux = i; iAux >= 0 && j < value[iAux].Length; iAux--)
                 {
                     char valor = value[iAux][j];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                     j++;
                 }
             }
@@ -115,34 +115,34 @@ namespace TestApp
             for (int j = value[0].Length - 1; j > 0; j--)
             {
                 int i = value.Length - 1;
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
                 for (int jAux = j; i >= 0 && jAux < value[i].Length; jAux++)
                 {
                     char valor = value[i][jAux];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                     i--;
                 }
             }
 
-            return maximaCadena;
+            return maxString;
         }
 
-        private Cadena SearchInversalDiagonalStrings()
+        private StringMatrix SearchInversalDiagonalStrings()
         {
-            Cadena actualCadena;
-            Cadena maximaCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+            StringMatrix currentString;
+            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
             for (int i = 0; i < value.Length; i++)
             {
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
                 int j = value[0].Length - 1;
 
                 for (int iAux = i; iAux >= 0 && j > 0; iAux--)
                 {
                     char valor = value[iAux][j];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                     j--;
                 }
             }
@@ -150,70 +150,70 @@ namespace TestApp
             for (int j = 0; j < value[0].Length - 1; j++)
             {
                 int i = value.Length - 1;
-                actualCadena = new Cadena(',', 0, StringTypeEnum.Diagonal);
+                currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
                 for (int jAux = j; i >= 0 && jAux >= 0; jAux--)
                 {
                     char valor = value[i][jAux];
-                    analizarValor(valor, ref actualCadena, ref maximaCadena);
+                    analyzeValue(valor, ref currentString, ref maxString);
                     i--;
                 }
             }
 
-            return maximaCadena;
+            return maxString;
         }
 
         public void calculateMaxString()
         {
-            List<Task<Cadena>> tasks = new List<Task<Cadena>>();
+            List<Task<StringMatrix>> tasks = new List<Task<StringMatrix>>();
             
-            tasks.Add(new Task<Cadena>(() =>
+            tasks.Add(new Task<StringMatrix>(() =>
             {
                 return SearchHorizontalsStrings();
             }));
 
-            tasks.Add(new Task<Cadena>(() =>
+            tasks.Add(new Task<StringMatrix>(() =>
             {
                 return SearchVerticalsStrings();
             }));
 
-            tasks.Add(new Task<Cadena>(() => 
+            tasks.Add(new Task<StringMatrix>(() => 
             {
                 return SearchDiagonalsString();
             }));
 
-            tasks.Add(new Task<Cadena>(() =>
+            tasks.Add(new Task<StringMatrix>(() =>
             {
                 return SearchInversalDiagonalStrings();
             }));
 
-            foreach (Task<Cadena> task in tasks)
+            foreach (Task<StringMatrix> task in tasks)
             {
                 task.Start();
             }
 
-            foreach (Task<Cadena> task in tasks)
+            foreach (Task<StringMatrix> task in tasks)
             {
                 task.Wait();
             }
 
-            List<Cadena> cadenasMaximas = new List<Cadena>();
+            List<StringMatrix> cadenasMaximas = new List<StringMatrix>();
 
-            foreach (Task<Cadena> task in tasks)
+            foreach (Task<StringMatrix> task in tasks)
             {
                 cadenasMaximas.Add(task.Result);
             }
 
-            foreach(Cadena cadena in cadenasMaximas)
+            foreach(StringMatrix cadena in cadenasMaximas)
             {
-                if (maxStrings == null || cadena.Repeticiones > maxStrings.First().Repeticiones)
+                if (maxStrings == null || cadena.Sum > maxStrings.First().Sum)
                 {
-                    maxStrings = new List<Cadena>
+                    maxStrings = new List<StringMatrix>
                     {
                         cadena
                     };
                 }
-                else if (cadena.Repeticiones == maxStrings.First().Repeticiones)
+                else if (cadena.Sum == maxStrings.First().Sum)
                 {
                     maxStrings.Add(cadena);
                 }
@@ -226,22 +226,22 @@ namespace TestApp
 
             for (int  i = 0; i < maxStrings.Count(); i++ )
             {
-                Cadena maxString = maxStrings[i];
+                StringMatrix maxString = maxStrings[i];
 
                 if (i > 0)
                 {
                     stringToShow = stringToShow + " y \"";
                 }
 
-                for (int j = 1; j <= maxString.Repeticiones; j++)
+                for (int j = 1; j <= maxString.Sum; j++)
                 {
-                    if (j < maxStrings[0].Repeticiones)
+                    if (j < maxStrings[0].Sum)
                     {
-                        stringToShow = stringToShow + maxString.Caracter + ", ";
+                        stringToShow = stringToShow + maxString.Character + ", ";
                     }
                     else
                     {
-                        stringToShow = stringToShow + maxString.Caracter + " (" + maxString.Type + ")\"";
+                        stringToShow = stringToShow + maxString.Character + " (" + maxString.Type + ")\"";
                     }
                 }
             }

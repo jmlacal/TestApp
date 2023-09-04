@@ -2,21 +2,21 @@
 using TestApp.Helpers;
 
 Console.WriteLine("Ingresar ruta de archivo txt para importar la matriz a procesar: ('N' para salir)");
-string lineaIngresada = Console.ReadLine();
+string readLine = Console.ReadLine();
 
-while (lineaIngresada.ToUpper() != "N")
+while (readLine.ToUpper() != "N")
 {
-    bool lecturaExitosa = FileManagerHelper.ReadFile(lineaIngresada, out Matrix? matrix, out string errorLectura);
+    bool successfulRead = FileManagerHelper.ReadFile(readLine, out Matrix? matrix, out string error);
 
-    if (lecturaExitosa)
+    if (successfulRead)
     {
         matrix.ShowMaxString();
     }
     else
     {
-        Console.WriteLine("\n" + errorLectura);
+        Console.WriteLine("\n" + error);
     }
 
     Console.WriteLine("\nIngresar ruta de archivo txt para importar la matriz a procesar: ('N' para salir)");
-    lineaIngresada = Console.ReadLine();
+    readLine = Console.ReadLine();
 }
