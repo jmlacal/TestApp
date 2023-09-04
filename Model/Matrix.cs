@@ -5,7 +5,7 @@ namespace TestApp
 {
     public class Matrix
     {
-        private List<StringMatrix> maxStrings;
+        private List<StringMatrix> maxStrings = new List<StringMatrix>();
         private readonly string[] value;
 
         private Matrix(string[] value)
@@ -37,7 +37,22 @@ namespace TestApp
             }
         }
 
-        private void AnalyzeValue(char value, ref StringMatrix currentString, ref StringMatrix maxString)
+        private void SetMaxStrings(in StringMatrix currentString, ref List<StringMatrix> currentMaxString)
+        {
+            if (currentMaxString.Count == 0 || currentString.Sum > currentMaxString.First().Sum)
+            {
+                currentMaxString = new List<StringMatrix>
+                    {
+                        currentString
+                    };
+            }
+            else if (currentString.Sum == currentMaxString.First().Sum)
+            {
+                currentMaxString.Add(currentString);
+            }
+        }
+
+        private void AnalyzeValue(char value, ref StringMatrix currentString, ref List<StringMatrix> currentMaxString)
         {
             if (currentString.Character == value)
             {
@@ -48,18 +63,16 @@ namespace TestApp
                 currentString = new StringMatrix(value, 1, currentString.Type);
             }
 
-            if (currentString.Sum > maxString.Sum)
+            if (currentMaxString.Count == 0 || currentString != currentMaxString.Last())
             {
-                maxString = currentString;
+                SetMaxStrings(currentString, ref currentMaxString);
             }
-
-            return;
         }
 
-        private StringMatrix SearchHorizontalsStrings()
+        private List<StringMatrix> SearchHorizontalsStrings()
         {
             StringMatrix currentString;
-            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Horizontal);
+            List<StringMatrix> maxString = new List<StringMatrix>();
 
             for (int i = 0; i < value.Length; i++)
             {
@@ -75,10 +88,10 @@ namespace TestApp
             return maxString;
         }
 
-        private StringMatrix SearchVerticalsStrings()
+        private List<StringMatrix> SearchVerticalsStrings()
         {
             StringMatrix currentString;
-            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Vertical);
+            List<StringMatrix> maxString = new List<StringMatrix>();
 
             for (int j = 0; j < value[0].Length; j++)
             {
@@ -94,10 +107,10 @@ namespace TestApp
             return maxString;
         }
 
-        private StringMatrix SearchDiagonalsString()
+        private List<StringMatrix> SearchDiagonalsString()
         {
             StringMatrix currentString;
-            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
+            List<StringMatrix> maxString = new List<StringMatrix>();
 
             for (int i = 0; i < value.Length; i++)
             {
@@ -128,10 +141,10 @@ namespace TestApp
             return maxString;
         }
 
-        private StringMatrix SearchInversalDiagonalStrings()
+        private List<StringMatrix> SearchInversalDiagonalStrings()
         {
             StringMatrix currentString;
-            StringMatrix maxString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
+            List<StringMatrix> maxString = new List<StringMatrix>();
 
             for (int i = 0; i < value.Length; i++)
             {
@@ -165,58 +178,48 @@ namespace TestApp
 
         public void CalculateMaxString()
         {
-            List<Task<StringMatrix>> tasks = new List<Task<StringMatrix>>();
+            List<Task<List<StringMatrix>>> tasks = new List<Task<List<StringMatrix>>>();
             
-            tasks.Add(new Task<StringMatrix>(() =>
+            tasks.Add(new Task<List<StringMatrix>> (() =>
             {
                 return SearchHorizontalsStrings();
             }));
 
-            tasks.Add(new Task<StringMatrix>(() =>
+            tasks.Add(new Task<List<StringMatrix>>(() =>
             {
                 return SearchVerticalsStrings();
             }));
 
-            tasks.Add(new Task<StringMatrix>(() => 
+            tasks.Add(new Task<List<StringMatrix>>(() => 
             {
                 return SearchDiagonalsString();
             }));
 
-            tasks.Add(new Task<StringMatrix>(() =>
+            tasks.Add(new Task<List<StringMatrix>>(() =>
             {
                 return SearchInversalDiagonalStrings();
             }));
 
-            foreach (Task<StringMatrix> task in tasks)
+            foreach (Task<List<StringMatrix>> task in tasks)
             {
                 task.Start();
             }
 
-            foreach (Task<StringMatrix> task in tasks)
+            foreach (Task<List<StringMatrix>> task in tasks)
             {
                 task.Wait();
             }
 
             List<StringMatrix> cadenasMaximas = new List<StringMatrix>();
 
-            foreach (Task<StringMatrix> task in tasks)
+            foreach (Task<List<StringMatrix>> task in tasks)
             {
-                cadenasMaximas.Add(task.Result);
+                cadenasMaximas.AddRange(task.Result);
             }
 
             foreach (StringMatrix cadena in cadenasMaximas)
             {
-                if (maxStrings == null || cadena.Sum > maxStrings.First().Sum)
-                {
-                    maxStrings = new List<StringMatrix>
-                    {
-                        cadena
-                    };
-                }
-                else if (cadena.Sum == maxStrings.First().Sum)
-                {
-                    maxStrings.Add(cadena);
-                }
+                SetMaxStrings(cadena, ref maxStrings);
             }
         }
 
