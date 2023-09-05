@@ -115,7 +115,7 @@ namespace TestApp
             StringMatrix currentString;
             List<StringMatrix> maxString = new List<StringMatrix>();
 
-            for (int i = 0; i < value.Length; i++)
+            for (int i = 1; i < value.Length; i++)
             {
                 currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
@@ -128,7 +128,7 @@ namespace TestApp
                 }
             }
 
-            for (int j = value[0].Length - 1; j > 0; j--)
+            for (int j = value[0].Length - 2; j > 0; j--)
             {
                 int i = value.Length - 1;
                 currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
@@ -149,13 +149,13 @@ namespace TestApp
             StringMatrix currentString;
             List<StringMatrix> maxString = new List<StringMatrix>();
 
-            for (int i = 0; i < value.Length; i++)
+            for (int i = 1; i < value.Length; i++)
             {
                 currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
 
                 int j = value[0].Length - 1;
 
-                for (int iAux = i; iAux >= 0 && j > 0; iAux--)
+                for (int iAux = i; iAux >= 0 && j >= 0; iAux--)
                 {
                     char valor = value[iAux][j];
                     AnalyzeValue(valor, ref currentString, ref maxString);
@@ -163,7 +163,7 @@ namespace TestApp
                 }
             }
 
-            for (int j = 0; j < value[0].Length - 1; j++)
+            for (int j = 1; j < value[0].Length - 1; j++)
             {
                 int i = value.Length - 1;
                 currentString = new StringMatrix(',', 0, StringTypeEnum.Diagonal);
