@@ -5,6 +5,9 @@ namespace TestApp
 {
     public class Matrix
     {
+        public const string EmptyStringsMsg = "\nLa matriz no contiene ninguna cadena caracteres adyacentes iguales.";
+        public const string MaxStringsMsg = "\nCadena/s de caracteres adyacentes más larga/s: ";
+
         private List<StringMatrix> maxStrings = new List<StringMatrix>();
         private readonly string[] value;
 
@@ -227,7 +230,7 @@ namespace TestApp
         {
             if (maxStrings.Count == 0)
             {
-                Console.WriteLine("\nLa matriz no contiene ninguna cadena caracteres adyacentes iguales.");
+                Console.WriteLine(EmptyStringsMsg);
 
                 return;
             }
@@ -256,7 +259,7 @@ namespace TestApp
                 }
             }
 
-            Console.WriteLine("\nCadena/s de caracteres adyacentes mas larga/s: " + stringToShow);            
+            Console.WriteLine(MaxStringsMsg + stringToShow);            
         }
     }
 }

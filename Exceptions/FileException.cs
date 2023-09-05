@@ -1,8 +1,8 @@
 ﻿namespace TestApp.Exceptions
 {
-    public class ExcesiveCaractersException : Exception
+    public class FileException : Exception
     {
-        public ExcesiveCaractersException() : base("Error: No se puede ingresar mas de un caracter en cada posición")
+        public FileException() : base("No se puede acceder al archivo en la ruta indicada.")
         {
         }
     }

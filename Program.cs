@@ -1,7 +1,8 @@
 ﻿using TestApp;
+using TestApp.Consts;
 using TestApp.Helpers;
 
-Console.WriteLine("Ingresar ruta de archivo txt para importar la matriz a procesar: ('N' para salir)");
+Console.WriteLine(Const.InitMsg);
 string readLine = Console.ReadLine();
 
 while (readLine.ToUpper() != "N")
@@ -14,9 +15,9 @@ while (readLine.ToUpper() != "N")
     }
     else
     {
-        Console.WriteLine("\n" + error);
+        Console.WriteLine(Const.ErrMsg + error);
     }
 
-    Console.WriteLine("\nIngresar ruta de archivo txt para importar la matriz a procesar: ('N' para salir)");
+    Console.WriteLine(Const.InitMsg);
     readLine = Console.ReadLine();
 }

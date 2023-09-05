@@ -2,7 +2,7 @@
 {
     public class EmptyFileException : Exception
     {
-        public EmptyFileException() : base("Error: El archivo no contiene filas de caracteres.")
+        public EmptyFileException() : base("El archivo no contiene filas de caracteres.")
         {
         }
     }
