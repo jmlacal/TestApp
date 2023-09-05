@@ -179,29 +179,22 @@ namespace TestApp
             return maxString;
         }
 
+        private Task<List<StringMatrix>> SearchMaxStringTask(Func<List<StringMatrix>> searchMaxString) 
+        {
+            return new Task<List<StringMatrix>>(() =>
+            {
+                return searchMaxString();
+            });
+        }
+
         private void CalculateMaxString()
         {
             List<Task<List<StringMatrix>>> tasks = new List<Task<List<StringMatrix>>>();
             
-            tasks.Add(new Task<List<StringMatrix>> (() =>
-            {
-                return SearchHorizontalsStrings();
-            }));
-
-            tasks.Add(new Task<List<StringMatrix>>(() =>
-            {
-                return SearchVerticalsStrings();
-            }));
-
-            tasks.Add(new Task<List<StringMatrix>>(() => 
-            {
-                return SearchDiagonalsString();
-            }));
-
-            tasks.Add(new Task<List<StringMatrix>>(() =>
-            {
-                return SearchInversalDiagonalStrings();
-            }));
+            tasks.Add(SearchMaxStringTask(SearchHorizontalsStrings));
+            tasks.Add(SearchMaxStringTask(SearchVerticalsStrings));
+            tasks.Add(SearchMaxStringTask(SearchDiagonalsString));
+            tasks.Add(SearchMaxStringTask(SearchInversalDiagonalStrings));
 
             foreach (Task<List<StringMatrix>> task in tasks)
             {
