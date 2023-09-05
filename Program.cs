@@ -11,13 +11,14 @@ while (readLine.ToUpper() != "N")
 
     if (successfulRead)
     {
+        matrix.ShowMatrix();
         matrix.ShowMaxString();
     }
     else
     {
-        Console.WriteLine(Const.ErrMsg + error);
+        Console.WriteLine("\n" + Const.ErrMsg + error);
     }
 
-    Console.WriteLine(Const.InitMsg);
+    Console.WriteLine("\n\n" + Const.InitMsg);
     readLine = Console.ReadLine();
 }

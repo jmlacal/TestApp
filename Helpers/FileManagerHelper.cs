@@ -12,6 +12,16 @@ namespace TestApp.Helpers
             }
         }
 
+        private static void ValidateTypeFile(string path)
+        {
+            int pathLenght = path.Length;
+
+            if (path.Substring((pathLenght - 4), 4).ToUpper() != ".TXT")
+            {
+                throw new TypeFileException();
+            }
+        }
+
         private static void ValidateNullCharacterLine(string line)
         {
             if (line.Contains(",,"))
@@ -54,7 +64,7 @@ namespace TestApp.Helpers
             line = line.Replace(",", string.Empty);
         }
 
-        public static bool ReadFile(string ruta, out Matrix? matrix, out string error)
+        public static bool ReadFile(string path, out Matrix? matrix, out string error)
         {
             string line;
             List<string> lineasArchivo = new List<string>();
@@ -62,7 +72,9 @@ namespace TestApp.Helpers
 
             try
             {
-                StreamReader sr = new StreamReader(ruta);
+                ValidateTypeFile(path);
+
+                StreamReader sr = new StreamReader(path);
 
                 try
                 {
@@ -93,9 +105,16 @@ namespace TestApp.Helpers
 
                 sr.Close();
             }
-            catch
+            catch (Exception ex)
             {
-                error = new FileException().Message;
+                if(ex is TypeFileException)
+                {
+                    error = ex.Message;
+                }
+                else
+                {
+                    error = new FileException().Message;
+                }
                 return false;
             }
 

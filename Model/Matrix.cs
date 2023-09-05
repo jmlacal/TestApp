@@ -179,7 +179,7 @@ namespace TestApp
             return maxString;
         }
 
-        private Task<List<StringMatrix>> SearchMaxStringTask(Func<List<StringMatrix>> searchMaxString) 
+        private Task<List<StringMatrix>> SearchMaxStringTask(Func<List<StringMatrix>> searchMaxString)
         {
             return new Task<List<StringMatrix>>(() =>
             {
@@ -190,7 +190,7 @@ namespace TestApp
         private void CalculateMaxString()
         {
             List<Task<List<StringMatrix>>> tasks = new List<Task<List<StringMatrix>>>();
-            
+
             tasks.Add(SearchMaxStringTask(SearchHorizontalsStrings));
             tasks.Add(SearchMaxStringTask(SearchVerticalsStrings));
             tasks.Add(SearchMaxStringTask(SearchDiagonalsString));
@@ -216,6 +216,34 @@ namespace TestApp
             foreach (StringMatrix cadena in cadenasMaximas)
             {
                 SetMaxStrings(cadena, ref maxStrings);
+            }
+        }
+
+        public void ShowMatrix()
+        {
+            if (maxStrings.Count > 0)
+            {
+                string matrixToShow = "\nMatriz ingresada:\n";
+                int lenghtRows = value.First().Length;
+                
+                for (int i = 0; i < value.Count(); i++)
+                {
+                    matrixToShow = matrixToShow + "\n";
+
+                    for(int j = 0; j < lenghtRows; j++)
+                    {
+                        if (j == (lenghtRows - 1))
+                        {
+                            matrixToShow = matrixToShow + value[i][j];
+                        }
+                        else
+                        {
+                            matrixToShow = matrixToShow + value[i][j] + ", ";
+                        }
+                    }
+                }
+
+                Console.WriteLine(matrixToShow);
             }
         }
 
