@@ -1,4 +1,5 @@
-﻿using TestApp.Enums;
+﻿using System.Text;
+using TestApp.Enums;
 using TestApp.Exceptions;
 
 namespace TestApp
@@ -42,14 +43,14 @@ namespace TestApp
 
         private void SetMaxStrings(in StringMatrix currentString, ref List<StringMatrix> currentMaxString)
         {
-            if (currentMaxString.Count == 0 || currentString.Sum > currentMaxString.First().Sum)
+            if (currentMaxString.Count == 0 || currentString.Sum > currentMaxString[0].Sum)
             {
                 currentMaxString = new List<StringMatrix>
                     {
                         currentString
                     };
             }
-            else if (currentString.Sum == currentMaxString.First().Sum)
+            else if (currentString.Sum == currentMaxString[0].Sum)
             {
                 currentMaxString.Add(currentString);
             }
@@ -223,27 +224,27 @@ namespace TestApp
         {
             if (maxStrings.Count > 0)
             {
-                string matrixToShow = "\nMatriz ingresada:\n";
-                int lenghtRows = value.First().Length;
+                StringBuilder matrixStringBuilder = new StringBuilder("\nMatriz ingresada:\n");
+                int lenghtRows = value[0].Length;
                 
                 for (int i = 0; i < value.Count(); i++)
                 {
-                    matrixToShow = matrixToShow + "\n";
+                    matrixStringBuilder.Append("\n");
 
                     for(int j = 0; j < lenghtRows; j++)
                     {
                         if (j == (lenghtRows - 1))
                         {
-                            matrixToShow = matrixToShow + value[i][j];
+                            matrixStringBuilder.Append(value[i][j]);
                         }
                         else
                         {
-                            matrixToShow = matrixToShow + value[i][j] + ", ";
+                            matrixStringBuilder.Append(value[i][j]).Append(", ");
                         }
                     }
                 }
 
-                Console.WriteLine(matrixToShow);
+                Console.WriteLine(matrixStringBuilder.ToString());
             }
         }
 
@@ -256,7 +257,7 @@ namespace TestApp
                 return;
             }
 
-            string stringToShow = "\"";
+            StringBuilder maxStringBuilder = new StringBuilder(MaxStringsMsg).Append("\"");
 
             for (int  i = 0; i < maxStrings.Count(); i++ )
             {
@@ -264,23 +265,23 @@ namespace TestApp
 
                 if (i > 0)
                 {
-                    stringToShow = stringToShow + " y \"";
+                    maxStringBuilder.Append(" y \"");
                 }
 
                 for (int j = 1; j <= maxString.Sum; j++)
                 {
                     if (j < maxStrings[0].Sum)
                     {
-                        stringToShow = stringToShow + maxString.Character + ", ";
+                        maxStringBuilder.Append(maxString.Character).Append(", ");
                     }
                     else
                     {
-                        stringToShow = stringToShow + maxString.Character + " (" + maxString.Type + ")\"";
+                        maxStringBuilder.Append(maxString.Character).Append(" (").Append(maxString.Type).Append(")\"");
                     }
                 }
             }
 
-            Console.WriteLine(MaxStringsMsg + stringToShow);            
+            Console.WriteLine(maxStringBuilder.ToString());            
         }
     }
 }
